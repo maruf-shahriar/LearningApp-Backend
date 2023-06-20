@@ -1,0 +1,5 @@
+LearningApp/course/__pycache__
+LearningApp/course/migrations
+LearningApp/user/__pycache__
+LearningApp/user/migrations
+LearningApp/db.sqlite3
