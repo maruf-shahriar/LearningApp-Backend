@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from .models import CustomUser
+from .serializers import UserCountSerializer
+from rest_framework.viewsets import ViewSet
 
 class EndpointList(APIView):
     def get(self, request):
@@ -12,3 +15,8 @@ class EndpointList(APIView):
             },
         })
             
+class UserCountAPIView(ViewSet):
+    def list(self, request):
+        user_count = CustomUser.objects.count()
+        serializer = UserCountSerializer({"user_count": user_count})
+        return Response(serializer.data)
