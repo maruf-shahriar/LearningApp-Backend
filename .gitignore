@@ -2,5 +2,4 @@ LearningApp/course/__pycache__/
 LearningApp/course/migrations/
 LearningApp/user/__pycache__/
 LearningApp/user/migrations/
-LearningApp/db.sqlite3
-LearningApp/__pycache__/
+LearningApp/LearningApp/__pycache__/

@@ -13,6 +13,11 @@ class EndpointList(APIView):
             },
             'info' : {
                 'user count': 'http://127.0.0.1:8000/user-count/'
+            },
+            'course' : {
+                'course list' : 'http://127.0.0.1:8000/course/',
+                'course instance': 'http://127.0.0.1:8000/course/<course_pk>',
+                'course category' : 'http://127.0.0.1:8000/course/?category=<course category>'
             }
         })
             

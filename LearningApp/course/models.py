@@ -18,6 +18,7 @@ class Course(models.Model):
     )
     category = models.CharField(max_length=255, choices=CATEGORY_CHOICES)
     cover_photo = models.ImageField(upload_to='course/cover', blank=True)
+    instructor = models.CharField(max_length=100, default="zisan")
 
     def __str__(self):
         return self.title

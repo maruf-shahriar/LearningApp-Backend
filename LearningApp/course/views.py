@@ -3,6 +3,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import filters
+
 from django.db.models import Prefetch
 from rest_framework.views import APIView
 
@@ -12,11 +13,17 @@ from user.models import CustomUser
 
 
 class CourseViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Course.objects.all()
+    #queryset = Course.objects.all()
     serializer_class = CourseSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title', 'category']
+    search_fields = ['title', 'category', 'instructor']
     #permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        queryset = Course.objects.all()
+        category = self.request.query_params.get('category')
+        if category:
+            queryset = queryset.filter(category=category)
+        return queryset
 
 class QuizViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Quiz.objects.all()

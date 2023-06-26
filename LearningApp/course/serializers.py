@@ -22,14 +22,14 @@ class CourseReviewSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'description']
 
 class CourseSerializer(serializers.ModelSerializer):
-    quizzes = QuizSerializer(many=True, read_only=True)
+    '''quizzes = QuizSerializer(many=True, read_only=True)
     pdfs = PDFSerializer(many=True, read_only=True)
     video_lectures = VideoLectureSerializer(many=True, read_only=True)
-    reviews = CourseReviewSerializer(many=True, read_only=True)
+    reviews = CourseReviewSerializer(many=True, read_only=True)'''
 
     class Meta:
         model = Course
-        fields = ['id', 'title', 'description', 'category', 'quizzes', 'pdfs', 'video_lectures', 'reviews']
+        fields = ['id', 'title', 'description', 'category', 'instructor', 'cover_photo']
 
 class EnrolledStudentSerializer(serializers.ModelSerializer):
     course_title = serializers.CharField(source='course.title', read_only=True)
