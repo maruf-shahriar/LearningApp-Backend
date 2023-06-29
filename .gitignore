@@ -3,3 +3,4 @@ LearningApp/course/migrations/
 LearningApp/user/__pycache__/
 LearningApp/user/migrations/
 LearningApp/LearningApp/__pycache__/
+LearningApp/db.sqlite3
