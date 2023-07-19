@@ -32,3 +32,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+class EnrolledCourse(models.Model):
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='enrolled_courses')
+    course_id = models.IntegerField()
+    course_title = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.course_title}"

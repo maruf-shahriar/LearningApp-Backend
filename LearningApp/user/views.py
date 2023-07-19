@@ -1,9 +1,16 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import CustomUser
-from .serializers import UserCountSerializer
+from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework import status
+from rest_framework import viewsets
 from djoser.views import UserViewSet
+
+from .models import CustomUser, EnrolledCourse
+from course.models import Course
+from .serializers import UserCountSerializer, CustomUserSerializer, EnrolledCourseSerializer
+
+
 class EndpointList(APIView):
     def get(self, request):
         return Response({
@@ -14,14 +21,29 @@ class EndpointList(APIView):
                 'password_rest' : 'http://127.0.0.1:8000/auth/users/reset_password/',
                 'password_reset_confirmation': 'http://127.0.0.1:8000/auth/users/reset_password_confirm/'
             },
-            'info' : {
-                'user count': 'http://127.0.0.1:8000/user-count/'
-            },
             'course' : {
                 'course list' : 'http://127.0.0.1:8000/course/',
                 'course instance': 'http://127.0.0.1:8000/course/<course_pk>',
-                'course category' : 'http://127.0.0.1:8000/course/?category=<course category>'
-            }
+                'course category' : 'http://127.0.0.1:8000/course/?category=<course_category>',
+                'course search' : 'http://127.0.0.1:8000/course/?search=<course_title, course_instructor>',
+                'course quiz': 'http://127.0.0.1:8000/course/<course_pk>/quiz/',
+                'course quiz instance': 'http://127.0.0.1:8000/course/<course_pk>/quiz/<quiz_pk>/',
+                'course quiz question': 'http://127.0.0.1:8000/course/<course_pk>/quiz/<quiz_pk>/question',
+                'course quiz question instance': 'http://127.0.0.1:8000/course/<course_pk>/quiz/<quiz_pk>/question/<question_pk>',
+                'course pdf': 'http://127.0.0.1:8000/course/<course_pk>/pdf',
+                'course video' : 'http://127.0.0.1:8000/course/<course_pk>/video'
+            },
+
+            'user':{
+                'user' : 'http://127.0.0.1:8000/user/',
+                'user instance' : 'http://127.0.0.1:8000/user/<user_pk>/',
+                'enrolled courses' : 'http://127.0.0.1:8000/user/<user_pk>/EnrolledCourses/'
+
+            },
+
+            'info' : {
+                'user count': 'http://127.0.0.1:8000/user-count/'
+            },
         })
             
 class UserCountAPIView(APIView):
@@ -48,3 +70,11 @@ def password_reset_confirm_view(request, uid, token):
         'token': token,
     }
     return render(request, 'user/password_reset_confirm.html', context)
+
+class CustomUserViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+class EnrolledCourseViewSet(viewsets.ModelViewSet):
+    queryset = EnrolledCourse.objects.all()
+    serializer_class = EnrolledCourseSerializer

@@ -1,34 +1,53 @@
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404
+from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import filters
 
-from django.db.models import Prefetch
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
-from .models import Course, Quiz, PDF, VideoLecture, CourseReview, EnrolledStudent
-from .serializers import CourseSerializer, QuizSerializer, PDFSerializer, VideoLectureSerializer, CourseReviewSerializer, EnrolledStudentSerializer
-from user.models import CustomUser
+from .models import Course, Quiz, Question, PDF, VideoLecture, CourseReview, EnrolledStudent
+from .serializers import CourseSerializer, QuizSerializer, QuestionSerializer, PDFSerializer, VideoLectureSerializer, CourseReviewSerializer, EnrolledStudentSerializer
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
-class CourseViewSet(viewsets.ReadOnlyModelViewSet):
-    #queryset = Course.objects.all()
+class CourseViewSet(ModelViewSet):
     serializer_class = CourseSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'category', 'instructor']
-    #permission_classes = [IsAuthenticated]
+
     def get_queryset(self):
         queryset = Course.objects.all()
         category = self.request.query_params.get('category')
         if category:
             queryset = queryset.filter(category=category)
         return queryset
-
+    
+    
 class QuizViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
     #permission_classes = [IsAuthenticated]
+
+class QuestionViewSet(ModelViewSet):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+
+    def update(self, request, *args, **kwargs):
+        question = self.get_object()
+        is_correct = request.data.get('is_correct')
+        
+        if is_correct is not None:
+            question.is_correct = is_correct
+            question.save()
+            return Response(QuestionSerializer(question).data)
+        else:
+            return Response({'error': 'is_correct field is missing or invalid'}, status=status.HTTP_400_BAD_REQUEST)
 
 class PDFViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = PDF.objects.all()
@@ -45,43 +64,6 @@ class CourseReviewViewSet(viewsets.ModelViewSet):
     serializer_class = CourseReviewSerializer
     #permission_classes = [IsAuthenticated]
 
-class CourseEnrollView(APIView):
-    def get(self, request, course_id):
-        try:
-            course = Course.objects.get(id=course_id)
-        except Course.DoesNotExist:
-            return Response({"message": "Course not found"}, status=404)
-        
-        enrolled_students = EnrolledStudent.objects.filter(course=course)
-        serializer = EnrolledStudentSerializer(enrolled_students, many=True)
-        
-        return Response(serializer.data)
-
-    def post(self, request, course_id):
-        username = request.data.get('username')
-        email = request.data.get('email')
-
-        try:
-            course = Course.objects.get(id=course_id)
-            user = CustomUser.objects.get(username=username, email=email)
-        except (Course.DoesNotExist, CustomUser.DoesNotExist):
-            return Response(status=400, data={'message': 'Invalid course or user'})
-
-        enrolled_student = EnrolledStudent.objects.create(course=course, user=user)
-        serializer = EnrolledStudentSerializer(enrolled_student)
-        return Response(serializer.data)
-
-    
-    def delete(self, request, course_id, student_id):
-        try:
-            course = Course.objects.get(id=course_id)
-        except Course.DoesNotExist:
-            return Response({"message": "Course not found"}, status=404)
-
-        try:
-            enrolled_student = EnrolledStudent.objects.get(course=course, student_id=student_id)
-        except EnrolledStudent.DoesNotExist:
-            return Response({"message": "Enrolled student not found"}, status=404)
-        
-        enrolled_student.delete()
-        return Response({"message": "Enrollment removed"}, status=204)
+class EnrolledStudentViewSet(viewsets.ModelViewSet):
+    queryset = EnrolledStudent.objects.all()
+    serializer_class = EnrolledStudentSerializer
