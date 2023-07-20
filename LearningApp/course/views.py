@@ -38,9 +38,11 @@ class ModuleViewSet(ModelViewSet):
     
     
 class QuizViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
-    #permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        module_id = self.kwargs['module_pk']
+        return Quiz.objects.filter(module_id=module_id)
 
 class QuestionViewSet(ModelViewSet):
     queryset = Question.objects.all()
@@ -58,14 +60,20 @@ class QuestionViewSet(ModelViewSet):
             return Response({'error': 'is_correct field is missing or invalid'}, status=status.HTTP_400_BAD_REQUEST)
 
 class PDFViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = PDF.objects.all()
     serializer_class = PDFSerializer
     #permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        module_id = self.kwargs['module_pk']
+        return PDF.objects.filter(module_id=module_id)
+
 class VideoLectureViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = VideoLecture.objects.all()
     serializer_class = VideoLectureSerializer
     #permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        module_id = self.kwargs['module_pk']
+        return VideoLecture.objects.filter(module_id=module_id)
 
 class CourseReviewViewSet(viewsets.ModelViewSet):
     queryset = CourseReview.objects.all()
