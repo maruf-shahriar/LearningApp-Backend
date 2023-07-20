@@ -5,7 +5,6 @@ User = get_user_model()
 
 # Create your models here.
 class Course(models.Model):
-
     title = models.CharField(max_length=255)
     description = models.TextField()
     CATEGORY_CHOICES = (
@@ -17,23 +16,41 @@ class Course(models.Model):
     )
     category = models.CharField(max_length=255, choices=CATEGORY_CHOICES)
     cover_photo = models.ImageField(upload_to='course/cover', blank=True)
-    instructor = models.CharField(max_length=100)
-   
+    learning = models.TextField()
+    skills = models.TextField()
 
     def __str__(self):
         return self.title
 
+class Instructor(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length=255)
+    profession = models.CharField(max_length=500)
+    photo = models.ImageField(upload_to='course/instructor', blank=True)
+    description = models.TextField()
+
+    def __str__(self):
+        return f"{self.course.title} - {self.name}"
+
+class Module(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length=500)
+
+    def __str__(self):
+        return f"{self.course.title} - {self.name}"
+
+
 class Quiz(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
     quiz_title = models.TextField()
     total_marks = models.IntegerField()
 
     def __str__(self):
-        return self.quiz_title
+        return f"{self.module.course.title} - {self.module.name} - {self.quiz_title}"
 
 
 class Question(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.DO_NOTHING)
     question = models.TextField()
     option1 = models.CharField(max_length=255)
     option2 = models.CharField(max_length=255)
@@ -54,23 +71,23 @@ class QuizAttempt(models.Model):
         return f"{self.user.username} - {self.quiz.quiz_title}"
 
 class PDF(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=255)
     pdf_file = models.FileField(upload_to='course/pdfs/')
 
     def __str__(self):
-        return self.title
+        return f"- {self.module.course.title} - {self.module.name} - {self.title}"
 
 class VideoLecture(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=255)
     video_file = models.FileField(upload_to='course/videos/')
 
     def __str__(self):
-        return self.title
+        return f"- {self.module.course.title} - {self.module.name} - {self.title}"
 
 class CourseReview(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField()
 

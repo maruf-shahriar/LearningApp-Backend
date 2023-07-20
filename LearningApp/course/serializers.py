@@ -1,5 +1,6 @@
+from dataclasses import field
 from rest_framework import serializers
-from .models import Course, Quiz, Question, QuizAttempt, PDF, VideoLecture, CourseReview, EnrolledStudent
+from .models import Course, Quiz, Question, QuizAttempt, PDF, VideoLecture, CourseReview, EnrolledStudent, Module, Instructor
 
 class QuizSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,10 +32,20 @@ class CourseReviewSerializer(serializers.ModelSerializer):
         model = CourseReview
         fields = ['id', 'user', 'description']
 
+class InstructorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Instructor
+        fields = ['id', 'name', 'profession', 'photo', 'description']
+
+class ModuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Module
+        fields = ['id', 'name']
+
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ['id', 'title', 'description', 'category', 'instructor', 'cover_photo']
+        fields = ['id', 'title', 'description', 'category', 'cover_photo', 'learning', 'skills']
 
 class EnrolledStudentSerializer(serializers.ModelSerializer):
     class Meta:

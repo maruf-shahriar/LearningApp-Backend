@@ -26,12 +26,12 @@ class EndpointList(APIView):
                 'course instance': 'http://127.0.0.1:8000/course/<course_pk>',
                 'course category' : 'http://127.0.0.1:8000/course/?category=<course_category>',
                 'course search' : 'http://127.0.0.1:8000/course/?search=<course_title, course_instructor>',
-                'course quiz': 'http://127.0.0.1:8000/course/<course_pk>/quiz/',
-                'course quiz instance': 'http://127.0.0.1:8000/course/<course_pk>/quiz/<quiz_pk>/',
-                'course quiz question': 'http://127.0.0.1:8000/course/<course_pk>/quiz/<quiz_pk>/question',
-                'course quiz question instance': 'http://127.0.0.1:8000/course/<course_pk>/quiz/<quiz_pk>/question/<question_pk>',
-                'course pdf': 'http://127.0.0.1:8000/course/<course_pk>/pdf',
-                'course video' : 'http://127.0.0.1:8000/course/<course_pk>/video'
+                'course instructor': 'http://127.0.0.1:8000/course/<course_pk>/instructor',
+                'course module' : 'http://127.0.0.1:8000/course/<course_pk>/module/',
+                'course quiz': 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/quiz/',
+                'course quiz question': 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/quiz/<quiz_pk>/question',
+                'course pdf': 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/pdf',
+                'course video' : 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/video'
             },
 
             'user':{
