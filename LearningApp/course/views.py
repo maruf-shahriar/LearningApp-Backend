@@ -19,7 +19,7 @@ User = get_user_model()
 class CourseViewSet(ModelViewSet):
     serializer_class = CourseSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title', 'category', 'instructor']
+    search_fields = ['title', 'category']
 
     def get_queryset(self):
         queryset = Course.objects.all()
