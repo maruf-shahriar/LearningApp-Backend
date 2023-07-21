@@ -29,12 +29,20 @@ class CourseViewSet(ModelViewSet):
         return queryset
 
 class InstructorViewSet (ModelViewSet):
-    queryset = Instructor.objects.all()
+    #queryset = Instructor.objects.all()
     serializer_class = InstructorSerializer
 
+    def get_queryset(self):
+        course_id = self.kwargs['courses_pk']
+        return Instructor.objects.filter(course_id=course_id)
+
 class ModuleViewSet(ModelViewSet):
-    queryset = Module.objects.all()
+    #queryset = Module.objects.all()
     serializer_class = ModuleSerializer
+
+    def get_queryset(self):
+        course_id = self.kwargs['courses_pk']
+        return Module.objects.filter(course_id=course_id)
     
     
 class QuizViewSet(viewsets.ReadOnlyModelViewSet):
