@@ -18,6 +18,7 @@ class Course(models.Model):
     cover_photo = models.ImageField(upload_to='course/cover', blank=True)
     learning = models.TextField()
     skills = models.TextField()
+    students = models.ManyToManyField(User, through='CourseEnrollment', related_name='enrollments')
 
     def __str__(self):
         return self.title
@@ -94,9 +95,9 @@ class CourseReview(models.Model):
     def __str__(self):
         return f"{self.user.username} - Review"
 
-class EnrolledStudent(models.Model):
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='enrolled_students')
-    email = models.EmailField()
+class CourseEnrollment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.email
+        return f"{self.user.username} - {self.course.title} "

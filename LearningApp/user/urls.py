@@ -1,15 +1,16 @@
+from posixpath import basename
 from django.urls import path
 from django.urls.conf import include
 from user import views
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested import routers
-from .views import EndpointList, UserCountAPIView, ActivateUser, password_reset_confirm_view, CustomUserViewSet, EnrolledCourseViewSet
+from .views import EndpointList, UserCountAPIView, ActivateUser, password_reset_confirm_view, CustomUserViewSet, EnrolledCoursesViewSet
 
 router = routers.DefaultRouter()
 router.register('user', CustomUserViewSet, basename='CustomUser')
 
 nested_router = routers.NestedDefaultRouter(router, r'user', lookup='CustomUser')
-nested_router.register('EnrolledCourses', EnrolledCourseViewSet, basename='enrolled-courses')
+nested_router.register('enrolledCourses', EnrolledCoursesViewSet, basename='enrolled-courses')
 
 urlpatterns = [
     path('', EndpointList.as_view()),

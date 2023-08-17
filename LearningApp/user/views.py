@@ -6,9 +6,14 @@ from rest_framework import status
 from rest_framework import viewsets
 from djoser.views import UserViewSet
 
-from .models import CustomUser, EnrolledCourse
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+from .models import CustomUser
+from .serializers import UserCountSerializer, CustomUserSerializer
+
 from course.models import Course
-from .serializers import UserCountSerializer, CustomUserSerializer, EnrolledCourseSerializer
+from course.serializers import CourseSerializer
 
 
 class EndpointList(APIView):
@@ -27,6 +32,7 @@ class EndpointList(APIView):
                 'course category' : 'http://127.0.0.1:8000/course/?category=<course_category>',
                 'course search' : 'http://127.0.0.1:8000/course/?search=<course_title, course_instructor>',
                 'course instructor': 'http://127.0.0.1:8000/course/<course_pk>/instructor',
+                'course enrollment (students who are enrolled) POST' : 'http://127.0.0.1:8000/course/<course_pk>/enrollment/',
                 'course module' : 'http://127.0.0.1:8000/course/<course_pk>/module/',
                 'course quiz': 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/quiz/',
                 'course quiz question': 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/quiz/<quiz_pk>/question',
@@ -37,8 +43,7 @@ class EndpointList(APIView):
             'user':{
                 'user' : 'http://127.0.0.1:8000/user/',
                 'user instance' : 'http://127.0.0.1:8000/user/<user_pk>/',
-                'enrolled courses' : 'http://127.0.0.1:8000/user/<user_pk>/EnrolledCourses/'
-
+                'enrolled courses (user enrolled courses)':'http://127.0.0.1:8000/user/<user_id>/enrolledCourses/',
             },
 
             'info' : {
@@ -75,6 +80,11 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
-class EnrolledCourseViewSet(viewsets.ModelViewSet):
-    queryset = EnrolledCourse.objects.all()
-    serializer_class = EnrolledCourseSerializer
+class EnrolledCoursesViewSet (viewsets.ModelViewSet):
+    serializer_class = CourseSerializer
+    def get_queryset(self):
+        user_id = self.kwargs['CustomUser_pk']
+        #user = User.objects.get(id=user_id)
+        enrolled_courses = Course.objects.filter(students=user_id)
+        return enrolled_courses
+        

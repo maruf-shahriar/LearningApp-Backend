@@ -2,7 +2,8 @@ from posixpath import basename
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested import routers
-from .views import QuizViewSet, PDFViewSet, VideoLectureViewSet, CourseReviewViewSet, CourseViewSet, QuestionViewSet, EnrolledStudentViewSet, ModuleViewSet, InstructorViewSet
+from .views import (QuizViewSet, PDFViewSet, VideoLectureViewSet, CourseReviewViewSet, CourseViewSet, 
+                    QuestionViewSet, ModuleViewSet, InstructorViewSet, CourseEnrollmentViewSet)
 
 router = routers.DefaultRouter()
 router.register('', CourseViewSet, basename='courses')
@@ -11,7 +12,7 @@ nested_router = routers.NestedDefaultRouter(router, r'', lookup='courses')
 nested_router.register('instructor', InstructorViewSet, basename = 'instructor')
 nested_router.register('module', ModuleViewSet, basename='module')
 nested_router.register('CourseReview', CourseReviewViewSet, basename='course-review')
-nested_router.register('EnrolledStudent', EnrolledStudentViewSet, basename = 'enrolled-student')
+nested_router.register('enrollment', CourseEnrollmentViewSet, basename='course-enrollment')
 
 module_router = routers.NestedSimpleRouter(nested_router, r'module', lookup='module')
 module_router.register('quiz', QuizViewSet, basename='quiz')
