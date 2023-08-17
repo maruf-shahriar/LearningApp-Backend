@@ -7,5 +7,5 @@ class UserCountSerializer(serializers.Serializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'username', 'phone_number', 'university', 'profile_picture']
+        fields = ['id', 'email', 'username', 'first_name', 'last_name', 'location', 'about_me', 'short_description', 'university', 'profile_picture']
 
