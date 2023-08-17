@@ -10,9 +10,10 @@ from rest_framework import filters
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Course, Module, Quiz, Question, PDF, VideoLecture, CourseReview, Instructor, Module, CourseEnrollment
+from .models import Course, Module, Quiz, Question, PDF, VideoLecture, CourseReview, Instructor, Module, CourseEnrollment, QuizAttempt
 from .serializers import (CourseSerializer, QuizSerializer, QuestionSerializer, PDFSerializer, 
-VideoLectureSerializer, CourseReviewSerializer, InstructorSerializer, ModuleSerializer, CourseEnrollmentSerializer)
+                          VideoLectureSerializer, CourseReviewSerializer, InstructorSerializer, 
+                          ModuleSerializer, CourseEnrollmentSerializer, QuizAttemptSerializer)
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -97,4 +98,13 @@ class CourseEnrollmentViewSet(viewsets.ModelViewSet):
         course_id = self.kwargs['courses_pk']  
         return CourseEnrollment.objects.filter(course_id=course_id)
 
+class QuizAttemptViewSet(viewsets.ModelViewSet):
+    serializer_class = QuizAttemptSerializer
+
+    def get_queryset(self):
+        course_pk = self.kwargs['courses_pk']
+        module_pk = self.kwargs['module_pk']
+        quiz_pk = self.kwargs['quiz_pk']
         
+        queryset = QuizAttempt.objects.filter(quiz__module__course_id=course_pk, quiz__module_id=module_pk, quiz_id=quiz_pk)
+        return queryset        

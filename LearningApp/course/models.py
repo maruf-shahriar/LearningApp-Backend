@@ -45,6 +45,7 @@ class Quiz(models.Model):
     module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
     quiz_title = models.TextField()
     total_marks = models.IntegerField()
+    attempted_by = models.ManyToManyField(User, through='QuizAttempt', related_name='attempts')
 
     def __str__(self):
         return f"{self.module.course.title} - {self.module.name} - {self.quiz_title}"
@@ -61,7 +62,7 @@ class Question(models.Model):
     is_correct = models.BooleanField(null=True)
 
     def __str__(self):
-        return self.question
+        return f"{self.quiz.module.course.title} - {self.quiz.module.name} - {self.quiz.quiz_title}"
 
 class QuizAttempt(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -77,7 +78,7 @@ class PDF(models.Model):
     pdf_file = models.FileField(upload_to='course/pdfs/')
 
     def __str__(self):
-        return f"- {self.module.course.title} - {self.module.name} - {self.title}"
+        return f"{self.module.course.title} - {self.module.name} - {self.title}"
 
 class VideoLecture(models.Model):
     module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
@@ -85,7 +86,7 @@ class VideoLecture(models.Model):
     video_file = models.FileField(upload_to='course/videos/')
 
     def __str__(self):
-        return f"- {self.module.course.title} - {self.module.name} - {self.title}"
+        return f"{self.module.course.title} - {self.module.name} - {self.title}"
 
 class CourseReview(models.Model):
     course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)

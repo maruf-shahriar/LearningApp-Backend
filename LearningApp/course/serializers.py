@@ -5,7 +5,7 @@ from .models import Course, Quiz, Question, QuizAttempt, PDF, VideoLecture, Cour
 class QuizSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quiz
-        fields = ['id', 'quiz_title', 'total_marks']
+        fields = ['id', 'quiz_title', 'total_marks', 'attempted_by']
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,5 +50,10 @@ class CourseSerializer(serializers.ModelSerializer):
 class CourseEnrollmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseEnrollment
-        fields = ['id', 'user', 'course'] 
+        fields = ['id', 'user', 'course']
+
+class QuizAttemptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuizAttempt
+        fields = ['id', 'user', 'quiz', 'marks_obtained']
 

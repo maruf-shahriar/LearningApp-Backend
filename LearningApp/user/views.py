@@ -35,6 +35,7 @@ class EndpointList(APIView):
                 'course enrollment (students who are enrolled) POST' : 'http://127.0.0.1:8000/course/<course_pk>/enrollment/',
                 'course module' : 'http://127.0.0.1:8000/course/<course_pk>/module/',
                 'course quiz': 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/quiz/',
+                'course quiz attempt (attempted by users)' : 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/quiz/<quiz_pk>/quizAttempt/',
                 'course quiz question': 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/quiz/<quiz_pk>/question',
                 'course pdf': 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/pdf',
                 'course video' : 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/video'

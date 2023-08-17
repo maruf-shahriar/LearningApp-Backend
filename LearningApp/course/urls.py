@@ -3,7 +3,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested import routers
 from .views import (QuizViewSet, PDFViewSet, VideoLectureViewSet, CourseReviewViewSet, CourseViewSet, 
-                    QuestionViewSet, ModuleViewSet, InstructorViewSet, CourseEnrollmentViewSet)
+                    QuestionViewSet, ModuleViewSet, InstructorViewSet, CourseEnrollmentViewSet, QuizAttemptViewSet)
 
 router = routers.DefaultRouter()
 router.register('', CourseViewSet, basename='courses')
@@ -21,7 +21,7 @@ module_router.register('video', VideoLectureViewSet, basename='video-lecture')
 
 quiz_router = routers.NestedSimpleRouter(module_router, r'quiz', lookup='quiz')
 quiz_router.register('question', QuestionViewSet, basename='quiz-question')
-
+quiz_router.register('quizAttempt', QuizAttemptViewSet, basename='quiz-attempt')
 
 
 urlpatterns = [
