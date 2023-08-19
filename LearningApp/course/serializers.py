@@ -10,7 +10,7 @@ class QuizSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ['id', 'question', 'option1', 'option2', 'option3', 'option4', 'correct_answer', 'is_correct']
+        fields = ['id', 'question', 'option1', 'option2', 'option3', 'option4', 'correct_answer']
 
 class QuizAttemptSerializer(serializers.ModelSerializer):
     class Meta:

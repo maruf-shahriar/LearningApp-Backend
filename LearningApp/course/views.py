@@ -55,19 +55,18 @@ class QuizViewSet(viewsets.ReadOnlyModelViewSet):
         return Quiz.objects.filter(module_id=module_id)
 
 class QuestionViewSet(ModelViewSet):
-    queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
-    def update(self, request, *args, **kwargs):
-        question = self.get_object()
-        is_correct = request.data.get('is_correct')
+    def get_queryset(self):
+        course_pk = self.kwargs['courses_pk']
+        module_pk = self.kwargs['module_pk']
+        quiz_pk = self.kwargs['quiz_pk']
         
-        if is_correct is not None:
-            question.is_correct = is_correct
-            question.save()
-            return Response(QuestionSerializer(question).data)
-        else:
-            return Response({'error': 'is_correct field is missing or invalid'}, status=status.HTTP_400_BAD_REQUEST)
+        return Question.objects.filter(quiz__module__course_id=course_pk,
+                                       quiz__module_id=module_pk,
+                                       quiz_id=quiz_pk)
+
+    
 
 class PDFViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PDFSerializer

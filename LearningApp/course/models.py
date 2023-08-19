@@ -59,7 +59,6 @@ class Question(models.Model):
     option3 = models.CharField(max_length=255)
     option4 = models.CharField(max_length=255)
     correct_answer = models.CharField(max_length=255)
-    is_correct = models.BooleanField(null=True)
 
     def __str__(self):
         return f"{self.quiz.module.course.title} - {self.quiz.module.name} - {self.quiz.quiz_title}"
