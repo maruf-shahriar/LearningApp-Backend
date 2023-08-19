@@ -107,3 +107,10 @@ class QuizAttemptViewSet(viewsets.ModelViewSet):
         
         queryset = QuizAttempt.objects.filter(quiz__module__course_id=course_pk, quiz__module_id=module_pk, quiz_id=quiz_pk)
         return queryset        
+
+class InstructorCoursesViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = CourseSerializer
+
+    def get_queryset(self):
+        instructor_id = self.kwargs['instructor_pk']
+        return Course.objects.filter(instructor__id=instructor_id)

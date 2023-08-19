@@ -47,6 +47,10 @@ class EndpointList(APIView):
                 'enrolled courses (user enrolled courses)':'http://127.0.0.1:8000/user/<user_id>/enrolledCourses/',
             },
 
+            'instructor': {
+                'instructor teachings': 'http://127.0.0.1:8000/course/teacher/<instructor_id>/teachings/',
+            },
+
             'info' : {
                 'user count': 'http://127.0.0.1:8000/user-count/'
             },
