@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +46,10 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
 ]
+
+
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -75,6 +81,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'LearningApp.wsgi.application'
+
+ASGI_APPLICATION = 'LearningApp.routing.application'
 
 
 # Database
@@ -123,6 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -166,3 +175,19 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'webapp1714@gmail.com'
 EMAIL_HOST_PASSWORD = 'kywukuoyzrjtfobo'
 EMAIL_PORT = 587
+
+JAZZMIN_SETTINGS = {
+     "site_title": "LearnCS Admin",
+     "site_header": "LearnCS",
+     "site_brand": "Admin Panel",
+     "site_logo": "default1.png",
+     "site_logo_classes": "",
+     "welcome_sign": "Welcome to LearnCS",
+     "copyright": "LearnCS Team",
+     "user_avatar": 'profile_picture',
+     "hide_apps": ['auth'],
+     "order_with_respect_to": ["user", "user.CustomUser", "course.Course", "course.Instructor", "course.CourseReview", "course.CourseEnrollment", 
+                                "course.Module", "course.Quiz", "course.QuizAttempt", "course.Question", "course.PDF", "course.VideoLecture"],
+     "show_ui_builder": True,
+
+}
