@@ -5,6 +5,8 @@ from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework import status
 from rest_framework import viewsets
 from djoser.views import UserViewSet
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -38,7 +40,9 @@ class EndpointList(APIView):
                 'course quiz attempt (attempted by users)' : 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/quiz/<quiz_pk>/quizAttempt/',
                 'course quiz question': 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/quiz/<quiz_pk>/question',
                 'course pdf': 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/pdf',
-                'course video' : 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/video'
+                'course pdf seen': 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/pdf/<pdf_pk>/pdf_seen/',
+                'course video' : 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/video',
+                'course video watched' : 'http://127.0.0.1:8000/course/<course_pk>/module/<module_pk>/video/<video_pk>/video_watch/'
             },
 
             'user':{
@@ -84,7 +88,9 @@ def password_reset_confirm_view(request, uid, token):
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
 
+    
 class EnrolledCoursesViewSet (viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     def get_queryset(self):

@@ -4,16 +4,19 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from rest_framework import filters
 
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Course, Module, Quiz, Question, PDF, VideoLecture, CourseReview, Instructor, Module, CourseEnrollment, QuizAttempt
+from .models import (Course, Module, Quiz, Question, PDF, VideoLecture, CourseReview, 
+                    Instructor, Module, CourseEnrollment, QuizAttempt, PDFSeen, VideoWatched)
 from .serializers import (CourseSerializer, QuizSerializer, QuestionSerializer, PDFSerializer, 
                           VideoLectureSerializer, CourseReviewSerializer, InstructorSerializer, 
-                          ModuleSerializer, CourseEnrollmentSerializer, QuizAttemptSerializer)
+                          ModuleSerializer, CourseEnrollmentSerializer, QuizAttemptSerializer,
+                          PDFSeenSerializer, VideoWatchSerializer)
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -49,14 +52,14 @@ class ModuleViewSet(ModelViewSet):
     
 class QuizViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = QuizSerializer
-
+    permission_classes = [IsAuthenticated]
     def get_queryset(self):
         module_id = self.kwargs['module_pk']
         return Quiz.objects.filter(module_id=module_id)
 
 class QuestionViewSet(ModelViewSet):
     serializer_class = QuestionSerializer
-
+    permission_classes = [IsAuthenticated]
     def get_queryset(self):
         course_pk = self.kwargs['courses_pk']
         module_pk = self.kwargs['module_pk']
@@ -70,7 +73,7 @@ class QuestionViewSet(ModelViewSet):
 
 class PDFViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PDFSerializer
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         module_id = self.kwargs['module_pk']
@@ -78,7 +81,7 @@ class PDFViewSet(viewsets.ReadOnlyModelViewSet):
 
 class VideoLectureViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VideoLectureSerializer
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         module_id = self.kwargs['module_pk']
@@ -114,3 +117,26 @@ class InstructorCoursesViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         instructor_id = self.kwargs['instructor_pk']
         return Course.objects.filter(instructor__id=instructor_id)
+
+class PdfSeenViewSet(ModelViewSet):
+    serializer_class = PDFSeenSerializer
+
+    def get_queryset(self):
+        course_pk = self.kwargs['courses_pk']
+        module_pk = self.kwargs['module_pk']
+        pdf_pk = self.kwargs['pdf_pk']
+        
+        queryset = PDFSeen.objects.filter(pdf__module__course_id=course_pk, pdf__module_id=module_pk, pdf_id=pdf_pk)
+        return queryset
+
+
+class VideoWatchViewSet(ModelViewSet):
+    serializer_class = VideoWatchSerializer
+
+    def get_queryset(self):
+        course_pk = self.kwargs['courses_pk']
+        module_pk = self.kwargs['module_pk']
+        video_pk = self.kwargs['videolecture_pk']
+        
+        queryset = VideoWatched.objects.filter(video__module__course_id=course_pk, video__module_id=module_pk, video_id=video_pk)
+        return queryset

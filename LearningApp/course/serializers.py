@@ -1,6 +1,8 @@
-from dataclasses import field
+from dataclasses import field, fields
 from rest_framework import serializers
-from .models import Course, Quiz, Question, QuizAttempt, PDF, VideoLecture, CourseReview, Module, Instructor, CourseEnrollment
+from .models import (Course, Quiz, Question, QuizAttempt, PDF, 
+                    VideoLecture, CourseReview, Module, Instructor, 
+                    CourseEnrollment, PDFSeen, VideoWatched)
 
 class QuizSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,12 +22,12 @@ class QuizAttemptSerializer(serializers.ModelSerializer):
 class PDFSerializer(serializers.ModelSerializer):
     class Meta:
         model = PDF
-        fields = ['id', 'title', 'pdf_file']
+        fields = ['id', 'title', 'pdf_file', 'read_by']
 
 class VideoLectureSerializer(serializers.ModelSerializer):
     class Meta:
         model = VideoLecture
-        fields = ['id', 'title', 'video_file']
+        fields = ['id', 'title', 'video_file', 'watched_by']
 
 class CourseReviewSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,3 +59,12 @@ class QuizAttemptSerializer(serializers.ModelSerializer):
         model = QuizAttempt
         fields = ['id', 'user', 'quiz', 'marks_obtained']
 
+class PDFSeenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PDFSeen
+        fields = ['id', 'user', 'pdf']
+
+class VideoWatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoWatched
+        fields = ['id', 'user', 'video']

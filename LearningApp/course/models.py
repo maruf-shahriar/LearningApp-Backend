@@ -75,6 +75,7 @@ class PDF(models.Model):
     module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=255)
     pdf_file = models.FileField(upload_to='course/pdfs/')
+    read_by =  models.ManyToManyField(User, through='PDFSeen')
 
     def __str__(self):
         return f"{self.module.course.title} - {self.module.name} - {self.title}"
@@ -83,9 +84,24 @@ class VideoLecture(models.Model):
     module = models.ForeignKey(Module, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=255)
     video_file = models.FileField(upload_to='course/videos/')
+    watched_by =  models.ManyToManyField(User, through='VideoWatched')
 
     def __str__(self):
         return f"{self.module.course.title} - {self.module.name} - {self.title}"
+
+class PDFSeen(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    pdf  = models.ForeignKey(PDF, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.pdf.title} "
+
+class VideoWatched(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    video  = models.ForeignKey(VideoLecture, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.video.title} "
 
 class CourseReview(models.Model):
     course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
