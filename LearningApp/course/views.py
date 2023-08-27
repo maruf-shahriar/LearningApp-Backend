@@ -52,14 +52,14 @@ class ModuleViewSet(ModelViewSet):
     
 class QuizViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = QuizSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     def get_queryset(self):
         module_id = self.kwargs['module_pk']
         return Quiz.objects.filter(module_id=module_id)
 
 class QuestionViewSet(ModelViewSet):
     serializer_class = QuestionSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     def get_queryset(self):
         course_pk = self.kwargs['courses_pk']
         module_pk = self.kwargs['module_pk']
@@ -73,7 +73,7 @@ class QuestionViewSet(ModelViewSet):
 
 class PDFViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PDFSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         module_id = self.kwargs['module_pk']
@@ -81,7 +81,7 @@ class PDFViewSet(viewsets.ReadOnlyModelViewSet):
 
 class VideoLectureViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VideoLectureSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         module_id = self.kwargs['module_pk']
