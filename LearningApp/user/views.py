@@ -7,6 +7,8 @@ from rest_framework import viewsets
 from djoser.views import UserViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
+from django.core.mail import send_mail
+from django.conf import settings
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -98,4 +100,21 @@ class EnrolledCoursesViewSet (viewsets.ModelViewSet):
         #user = User.objects.get(id=user_id)
         enrolled_courses = Course.objects.filter(students=user_id)
         return enrolled_courses
-        
+
+class SendEmailView(APIView):
+    def post(self, request, *args, **kwargs):
+        name = request.data.get('name')
+        email = request.data.get('email')
+        message = request.data.get('message')
+
+        subject = f"New Contact Message from {name}"
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [settings.EMAIL_HOST_USER]
+        message_format = f"Name: {name}\nEmail: {email}\nMessage: {message}"
+
+
+        try:
+            send_mail(subject, message_format, from_email, recipient_list)
+            return Response({'message': 'Email sent successfully'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'message': 'Error sending email'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
