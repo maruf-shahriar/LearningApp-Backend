@@ -196,6 +196,13 @@ JAZZMIN_SETTINGS = {
         "course.Course":"fa fa-book",
        "course.Instructor": "fa fa-user-circle",
        "course.CourseReview":"fa fa-thumbs-up",
+       "course.CourseEnrollment": "fa fa-graduation-cap",
+       "course.Quiz": "fas fa-question-circle", 
+        "course.Question": "fas fa-question",      
+        "course.PDF": "fas fa-file-pdf",           
+        "course.VideoLecture": "fas fa-video",
+        "course.Module": "fas fa-th-list",         
+        "course.QuizAttempt": "fas fa-poll",  
     },
 
 }
